@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: var(--font-poppins);
+  }
+}
+
+/* =========================
+   SEMANTIC UTILITIES
+   ========================= */
+@layer utilities {
+
+  /* -------- Colors -------- */
+  .bg-app-black {
+    background-color: rgb(var(--color-black));
+  }
+
+  .bg-app-gray-light {
+    background-color: rgb(var(--color-gray-light));
+  }
+
+  .text-app-black {
+    color: rgb(var(--color-black));
+  }
+
+  .text-app-white {
+    color: rgb(var(--color-white));
+  }
+
+  .text-auth-primary {
+    color: var(--color-auth-primary);
+  }
+
+  .btn-auth-primary {
+    background-color: var(--color-auth-primary);
+    border-radius: var(--border-radius-sm);
+  }
+
+  .btn-auth-primary:hover {
+    background-color: var(--color-auth-primary-hover);
+  }
+
+  /* -------- Header layout -------- */
+  .px-header {
+    padding-left: var(--header-x-padding);
+    padding-right: var(--header-x-padding);
+  }
+
+  .h-header-top {
+    height: var(--header-top-height);
+  }
+
+  /* -------- Border -------- */
+  .border-thin {
+    border-width: var(--border-thin);
+  }
+
+  /* -------- Typography -------- */
+  .text-xs-token {
+    font-size: var(--text-xs);
+  }
+
+  .text-sm-token {
+    font-size: var(--text-sm);
+  }
+
+  .text-base-token {
+    font-size: 1rem;
+    line-height: var(--leading-normal);
+  }
+
+  .text-lg-token {
+    font-size: var(--text-lg);
+    line-height: var(--leading-normal);
+  }
+
+  .text-xl-token {
+    font-size: var(--text-xl);
+    line-height: 1.75rem;
+  }
+
+  .text-heading-xl {
+    font-size: var(--text-4xl);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .text-body-base {
+    font-size: 1rem;
+    line-height: var(--leading-normal);
+  }
+
+  .leading-normal-std {
+    line-height: var(--leading-normal);
+  }
+
+  .leading-tight-std {
+    line-height: var(--leading-tight);
+  }
+
+  .leading-relaxed-std {
+    line-height: var(--leading-relaxed);
+  }
+
+  /* -------- Buttons -------- */
+  .btn-auth-primary {
+    background-color: var(--color-auth-primary);
+    border-radius: var(--border-radius-sm);
+    color: white;
+    line-height: var(--leading-normal);
+  }
+
+  .btn-auth-primary:hover {
+    background-color: var(--color-auth-primary-hover);
+  }
+
+  .bg-auth-bg-light {
+    background-color: var(--color-auth-bg-light);
+  }
+
+  .bg-auth-primary {
+    background-color: var(--color-auth-primary);
+    color: rgb(var(--color-white));
+  }
+
+  .bg-auth-primary:hover {
+    background-color: var(--color-auth-primary-hover);
+  }
+}

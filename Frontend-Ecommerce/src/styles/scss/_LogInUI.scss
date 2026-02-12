@@ -1,0 +1,52 @@
+// styles/scss/_LogInUI.scss
+
+// Mobile adjustments (below 768px) - Add horizontal padding
+@media (max-width: 767px) {
+  .flex.items-center.w-full.min-h-screen.bg-white {
+    padding: 2rem 1.5rem; // 24px horizontal padding
+  }
+  
+  // Ensure the form container also has padding
+  .flex.items-center.justify-center.flex-1 {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
+
+// Tablet adjustments (768px to 1023px)
+@media (min-width: 768px) and (max-width: 1023px) {
+  .flex.items-center.w-full.min-h-screen.bg-white {
+    padding: 3rem 2rem;
+  }
+}
+
+// Desktop - responsive scaling between 1024px and 1338px
+@media (min-width: 1024px) and (max-width: 1338px) {
+  .flex.items-center.w-full.min-h-screen.bg-white {
+    padding: 2rem 0;
+  }
+}
+
+// Desktop - full size above 1338px
+@media (min-width: 1339px) {
+  .flex.items-center.w-full.min-h-screen.bg-white {
+    padding: 2rem 0;
+  }
+}
+
+// Ensure form inputs are touch-friendly on mobile
+@media (max-width: 767px) {
+  input[type="text"],
+  input[type="password"] {
+    font-size: 16px; // Prevents zoom on iOS
+    min-height: 44px; // Touch-friendly size
+  }
+}
+
+// Additional spacing for better mobile UX
+@media (max-width: 1023px) {
+  .flex.flex-col.gap-8,
+  .flex.flex-col.gap-10 {
+    gap: 2.5rem; // Increased gaps on mobile/tablet
+  }
+}

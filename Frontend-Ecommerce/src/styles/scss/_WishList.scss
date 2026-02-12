@@ -1,0 +1,166 @@
+// ============================================
+// _WishList.scss - Wishlist Page Styles
+// ============================================
+
+.wishlist-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+    padding: 80px 16px 140px;
+  
+    @media (min-width: 640px) {
+      padding: 80px 32px 140px;
+    }
+  
+    @media (min-width: 768px) {
+      padding: 80px 64px 140px;
+    }
+  
+    @media (min-width: 1024px) {
+      padding: 80px 135px 140px;
+    }
+  }
+  
+  .wishlist-main {
+    max-width: 1170px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+  
+  .wishlist-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .wishlist-product-card {
+    position: relative;
+  }
+  
+  .just-for-you-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .empty-wishlist-message {
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ======================
+     RESPONSIVE GRID STYLES
+     (Matching ProductsUI)
+  ====================== */
+
+  .wishlist-grid,
+  .just-for-you-grid {
+    display: grid;
+    
+    /* 4 fixed-width cards */
+    grid-template-columns: repeat(4, 260px);
+    
+    /* Distribute cards across full width */
+    justify-content: space-between;
+    
+    /* Visible gaps */
+    column-gap: 24px;
+    row-gap: 32px;
+    
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  /* Card width enforcement */
+  .wishlist-grid .product-card--grid,
+  .just-for-you-grid .product-card--grid {
+    width: 260px;
+    max-width: 260px;
+  }
+
+  /* Tablet — 2 cards */
+  @media (max-width: 1024px) {
+    .wishlist-grid,
+    .just-for-you-grid {
+      grid-template-columns: repeat(2, 48%);
+      justify-content: space-between;
+      column-gap: 0;
+    }
+    
+    .wishlist-grid .product-card--grid,
+    .just-for-you-grid .product-card--grid {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  /* Mobile — 1 card */
+  @media (max-width: 640px) {
+    .wishlist-grid,
+    .just-for-you-grid {
+      grid-template-columns: 100%;
+      justify-content: center;
+    }
+  }
+
+// // ============================================
+// // _WishList.scss - Wishlist Page Styles
+// // ============================================
+
+// .wishlist-container {
+//     width: 100%;
+//     min-height: 100vh;
+//     background-color: white;
+//     padding: 80px 16px 140px;
+  
+//     @media (min-width: 640px) {
+//       padding: 80px 32px 140px;
+//     }
+  
+//     @media (min-width: 768px) {
+//       padding: 80px 64px 140px;
+//     }
+  
+//     @media (min-width: 1024px) {
+//       padding: 80px 135px 140px;
+//     }
+//   }
+  
+//   .wishlist-main {
+//     max-width: 1170px;
+//     margin: 0 auto;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 80px;
+//   }
+  
+//   .wishlist-section {
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//   }
+  
+//   .wishlist-product-card {
+//     position: relative;
+//   }
+  
+//   .just-for-you-section {
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//   }
+  
+//   .empty-wishlist-message {
+//     width: 100%;
+//     min-height: 200px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//   }

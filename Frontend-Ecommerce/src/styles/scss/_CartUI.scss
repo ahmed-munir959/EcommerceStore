@@ -1,0 +1,318 @@
+// ============================================
+// scss/_CartUI.scss - Cart UI Component Styles
+// ============================================
+
+// Bottom Section Container
+.bottom-section {
+    // On large screens, align items to start (top) and space between
+    @media (min-width: 1024px) {
+      align-items: flex-start !important;
+      justify-content: space-between !important;
+    }
+  }
+  
+  // Coupon Section Styles
+  .coupon-section {
+    // Display & Layout
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    
+    // Container Properties
+    max-width: 527px;
+    width: 100%;
+    opacity: 1;
+    
+    // Input Field Styles
+    .coupon-input {
+      flex: 1;
+      min-width: 200px; // Minimum width before wrapping
+      height: 56px;
+      padding: 0 24px;
+      
+      // Input specific styles
+      &::placeholder {
+        color: #9ca3af;
+        opacity: 0.8;
+      }
+      
+      &:focus {
+        border-color: #4b5563;
+      }
+    }
+    
+    // Button Styles
+    .coupon-button {
+      height: 56px;
+      padding: 0 48px;
+      flex-shrink: 0; // Prevent button from shrinking
+      min-width: fit-content;
+      
+      &:hover {
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+      }
+      
+      &:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+      }
+    }
+    
+    // Responsive Behavior
+    
+    // Small screens (mobile - less than 640px)
+    @media (max-width: 639px) {
+      max-width: 100%;
+      flex-direction: column;
+      
+      .coupon-input,
+      .coupon-button {
+        width: 100%;
+        min-width: 100%;
+      }
+    }
+    
+    // Medium screens (tablet - 640px to 1023px)
+    @media (min-width: 640px) and (max-width: 1023px) {
+      max-width: 100%;
+      
+      // Stack when space is tight (e.g., in a narrow container)
+      &.stack-on-wrap {
+        flex-direction: column;
+        
+        .coupon-input,
+        .coupon-button {
+          width: 100%;
+        }
+      }
+    }
+    
+    // Large screens (desktop - 1024px and up)
+    @media (min-width: 1024px) {
+      flex-direction: row;
+      max-width: 527px;
+      
+      .coupon-input {
+        flex: 1;
+        min-width: 200px; // Comfortable minimum on large screens
+      }
+      
+      .coupon-button {
+        width: auto;
+        min-width: auto;
+      }
+    }
+    
+    // Auto-stack when content would wrap
+    // This uses container queries approach
+    @container (max-width: 500px) {
+      flex-direction: column;
+      
+      .coupon-input,
+      .coupon-button {
+        width: 100%;
+      }
+    }
+  }
+  
+  // Additional Cart UI Styles (if needed in future)
+  .cart-container {
+    // Container styles can be added here
+  }
+  
+  .cart-item {
+    // Cart item specific styles can be added here
+  }
+  
+  // Quantity Control Styles
+  .quantity-control {
+    width: 72px;
+    height: 44px;
+    overflow: hidden; // Prevent content from overflowing
+    display: flex;
+    align-items: stretch;
+    
+    .quantity-input {
+      flex: 1;
+      min-width: 0; // Allow input to shrink
+      font-size: 16px;
+      font-weight: 400;
+      padding: 0 4px;
+      text-align: center;
+      border: none;
+      background: transparent;
+    }
+    
+    .quantity-buttons {
+      display: flex;
+      flex-direction: column;
+      width: 28px;
+      height: 100%;
+      flex-shrink: 0; // Prevent buttons from shrinking
+      
+      .quantity-btn-up,
+      .quantity-btn-down {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        min-height: 0; // Allow buttons to shrink
+        height: 50%; // Explicitly set each button to half height
+        border: none;
+        background: transparent;
+        cursor: pointer;
+      }
+      
+      .chevron-icon {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+      }
+    }
+    
+    // Responsive for screens below 768px
+    @media (max-width: 767px) {
+      width: 56px;
+      height: 34px;
+      
+      .quantity-input {
+        font-size: 13px;
+        padding: 0 2px;
+      }
+      
+      .quantity-buttons {
+        width: 22px;
+        
+        .chevron-icon {
+          width: 9px;
+          height: 9px;
+        }
+      }
+    }
+    
+    // Responsive for very small screens (below 480px)
+    @media (max-width: 479px) {
+      width: 50px;
+      height: 30px;
+      
+      .quantity-input {
+        font-size: 11px;
+        padding: 0 1px;
+      }
+      
+      .quantity-buttons {
+        width: 18px;
+        
+        .chevron-icon {
+          width: 7px;
+          height: 7px;
+        }
+      }
+    }
+  }
+  
+  // Remove Button Styles
+  .remove-item-btn {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;              // ADD THIS
+    align-items: center;        // ADD THIS
+    justify-content: center;    // ADD THIS
+
+    flex-shrink: 0;          // 🔑 prevents stretching
+    aspect-ratio: 1 / 1;  
+    border-radius: 9999px;   // keep it circular
+    overflow: hidden;        // avoid internal overflow
+    padding: 0;
+    line-height: 0;          // <-- prevents baseline/inline element stretching
+  
+    // make sure any text node / baseline doesn’t add height
+    font-size: 0;
+
+    .remove-icon {
+      display: block;        // avoid inline SVG baseline gaps
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      min-height: 16px;
+      max-width: 100%;
+      max-height: 100%;
+      box-sizing: content-box;
+    }
+    
+    // Medium screens and up
+    @media (min-width: 640px) {
+      top: 8px;
+      left: 8px;
+      width: 40px;
+      height: 40px;
+      
+      .remove-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    
+    
+    // Responsive for screens below 768px
+
+    @media (max-width: 767px) {
+      top: -6px;
+      left: -6px;
+      width: 48px;
+      height: 22px;
+  
+      .remove-icon {
+        width: 12px;
+        height: 12px;
+        min-width: 12px;
+        min-height: 12px;
+      }
+    }
+    
+    // Very small screens (below 480px)
+    @media (max-width: 479px) {
+      top: -4px;
+      left: -4px;
+      width: 20px;
+      height: 20px;
+  
+      .remove-icon {
+        width: 11px;
+        height: 11px;
+        min-width: 11px;
+        min-height: 11px;
+      }
+    }
+  }
+
+  /* Extra: ensure SVG rendered by lucide-react obeys the CSS */
+.remove-item-btn svg {
+  display: block;      /* removes whitespace from inline baseline */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+  
+  .cart-total-section {
+    // Ensure it stays at the end on large screens
+    @media (min-width: 1024px) {
+      margin-left: auto !important;
+      flex-shrink: 0;
+    }
+    
+    // Full width on mobile/tablet
+    @media (max-width: 1023px) {
+      width: 100% !important;
+      margin-left: 0 !important;
+    }
+  }

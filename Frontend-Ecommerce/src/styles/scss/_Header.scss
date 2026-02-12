@@ -1,0 +1,322 @@
+// styles/scss/_Header.scss
+
+// Mobile menu overlay animation
+.mobile-menu-overlay {
+  /* position the overlay exactly where the mobile menu appears */
+  position: fixed;
+  top: var(--header-height, 142px); /* starts under the header */
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--header-height, 142px)); /* fills from header to bottom */
+  z-index: 40; /* behind the menu (menu uses z-50) */
+
+  /* white, mostly opaque so menu items are readable */
+  background-color: rgba(255, 255, 255, 0.98) !important;
+
+  /* optional: subtle backdrop blur (modern browsers) */
+  /* backdrop-filter: blur(3px); */
+
+  animation: fadeIn 0.18s ease-out;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+}
+
+.mobile-menu-container {
+  background-color: rgba(255,255,255,0.99) !important;
+  z-index: 50; /* ensure it's above other content */
+  /* rest of existing styles retained */
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+
+
+// Mobile menu container - positioned absolutely
+.mobile-menu-container {
+  // This will slide down from under the header
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+// Mobile menu dropdown styles
+.mobile-menu-dropdown {
+  // Add subtle fade-in for menu items
+  nav > a,
+  nav > button {
+    animation: slideInFromLeft 0.3s ease-out backwards;
+    
+    @for $i from 1 through 10 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.05}s;
+      }
+    }
+  }
+  
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+// Header should be positioned relative for absolute menu positioning
+header {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+// Ensure header stays on top
+header {
+  z-index: 50;
+  background-color: white;
+}
+
+// Tablet adjustments
+@media (min-width: 768px) and (max-width: 1023px) {
+  header {
+    nav a {
+      font-size: 0.9375rem;
+    }
+  }
+}
+
+// Categories submenu - smooth expansion
+.categories-submenu {
+  background-color: rgb(249, 250, 251);
+  
+  a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: rgb(243, 244, 246);
+      padding-left: 2.5rem;
+    }
+  }
+}
+
+// Smooth chevron rotation
+button svg {
+  transition: transform 0.3s ease;
+}
+
+// Responsive adjustments for 769px - 945px range
+@media (min-width: 768px) and (max-width: 945px) {
+  .header-nav-link {
+    font-size: 0.75rem !important;
+    transition: font-size 0.2s ease;
+  }
+  
+  .header-icon-btn {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+    transition: all 0.2s ease;
+    
+    svg {
+      width: 1rem !important;
+      height: 1rem !important;
+    }
+  }
+}
+
+// Smooth transitions for all responsive elements
+.header-nav-link,
+.header-icon-btn,
+.header-search-input {
+  transition: all 0.2s ease;
+}
+
+// Mobile menu scrollbar styling
+.mobile-menu-container {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+// Prevent body scroll when menu is open
+body.menu-open {
+  overflow: hidden !important;
+}
+
+// Mobile-specific: ensure menu appears correctly
+@media (max-width: 768px) {
+  .mobile-menu-container {
+    // Ensure menu is properly positioned
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  
+  .mobile-menu-overlay {
+    // Overlay covers entire viewport
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+// Desktop: hide mobile menu elements
+@media (min-width: 768px) {
+  .mobile-menu-container,
+  .mobile-menu-overlay {
+    display: none !important;
+  }
+}
+
+
+/* ================= PROFILE DROPDOWN ================= */
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+
+  // Exact parent box dimensions
+  width: 224px;
+  height: 238px;
+
+  border-radius: 4px;
+  
+  // SOLID BACKGROUND - consistent across all screen sizes
+  // Using a dark semi-transparent background that doesn't change
+  background: rgba(0, 0, 0, 0.85) !important;
+  
+  // Optional: Add subtle backdrop blur for modern browsers
+  // This enhances the effect but the solid background ensures consistency
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  z-index: 60;
+
+  animation: fadeScaleIn 0.18s ease-out;
+  
+  // Ensure backdrop-filter works properly
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+.profile-dropdown-inner {
+  // Exact inner box dimensions and positioning
+  width: 192px;
+  height: auto;
+  min-height: 180px;
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+/* ================= ITEMS ================= */
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  
+  width: 100%;
+  text-align: left;
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0%;
+  color: #ffffff;
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  svg {
+    flex-shrink: 0;
+    color: #ffffff;
+  }
+
+  span {
+    flex: 1;
+    white-space: nowrap;
+  }
+}
+
+/* All icons have same dimensions */
+.profile-item .icon-lg,
+.profile-item .icon-sm {
+  width: 32px;
+  height: 32px;
+}
+
+/* Logout item - same styling as others */
+.profile-item.logout {
+  color: #ffffff;
+  
+  svg {
+    color: #ffffff;
+  }
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeScaleIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Ensure dropdown appears properly on all screen sizes
+// Force consistent background across all breakpoints
+@media (max-width: 768px) {
+  .profile-dropdown {
+    right: 0;
+    background: rgba(0, 0, 0, 0.85) !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .profile-dropdown {
+    background: rgba(0, 0, 0, 0.85) !important;
+  }
+}
+
+

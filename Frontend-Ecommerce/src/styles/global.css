@@ -1,0 +1,83 @@
+/* Import Poppins and Inter fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Colors */
+    --color-primary: 59 130 246;      /* blue-500 */
+    --color-secondary: 16 185 129;    /* emerald-500 */
+    --color-accent: 251 146 60;       /* orange-400 */
+    --color-dark: 31 41 55;           /* gray-800 */
+    --color-light: 243 244 246;       /* gray-100 */
+    --color-black: 0 0 0;
+    --color-white: 255 255 255;
+    --color-gray-light: 245 245 245;
+
+    /* Auth Colors */
+    --color-auth-primary: #DB4444;    /* Primary red for auth buttons */
+    --color-auth-primary-hover: #c23a3a; /* Hover state for auth buttons */
+    --color-auth-bg-light: #CBE4E8;   /* Light blue background for auth image section */
+
+    /* Header spacing */
+    --header-x-padding: 135px;
+    --header-top-height: 3rem; /* 48px == h-12 */
+
+    /* Border */
+    --border-thin: 0.5px;
+    --border-radius-sm: 4px;
+
+    /* Typography */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    /* Line Heights */
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+
+    /* Letter Spacing */
+    --tracking-normal: 0;
+    --tracking-wide: 0.04em;
+  
+    /* Spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+  
+    /* Font */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-poppins: 'Poppins', sans-serif;
+}
+
+/* Apply fonts globally */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+  
+/* Utility classes for fonts */
+.font-poppins {
+    font-family: 'Poppins', sans-serif;
+}
+  
+.font-inter {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Prevent horizontal scroll */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+  
