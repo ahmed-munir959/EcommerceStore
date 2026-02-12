@@ -93,7 +93,7 @@ const SignUpUI: React.FC = () => {
   return (
     <div className="flex items-center w-full min-h-screen bg-white overflow-hidden">
       {/* Left Side */}
-      <div className="hidden lg:block lg:w-[60%] xl:w-[805px] h-[500px] lg:h-[650px] xl:h-[781px] flex-shrink-0 relative overflow-hidden bg-[#CBE4E8]">
+      <div className="hidden lg:block lg:w-[60%] xl:w-[805px] h-[500px] lg:h-[650px] xl:h-[781px] shrink-0 relative overflow-hidden bg-[#CBE4E8]">
         <img src={authHero} alt="Shopping" className="w-full h-full object-cover" />
       </div>
 
