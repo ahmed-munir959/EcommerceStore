@@ -92,34 +92,6 @@ export const login = asyncHandler(async (req, res, next) => {
     accessToken,
   });
 });
-// export const login = asyncHandler(async (req, res, next) => {
-//   const { email, password } = req.body;
-
-//   const user = await User.findOne({ email }).select('+password');
-//   if (!user || !(await user.matchPassword(password))) {
-//     return next(new ErrorHandler('Invalid email or password', 401));
-//   }
-
-//   const accessToken = generateAccessToken(user);
-//   const refreshToken = generateRefreshToken(user);
-
-//   res.cookie('refreshToken', refreshToken, {
-//     httpOnly: true,
-//     secure: process.env.NODE_ENV === 'production',
-//     sameSite: 'strict',
-//     maxAge: 7 * 24 * 60 * 60 * 1000,
-//   });
-
-//   res.status(200).json({
-//     user: {
-//       id: user._id,
-//       name: user.name,
-//       email: user.email,
-//       role: user.role,
-//     },
-//     accessToken,
-//   });
-// });
 
 export const refreshToken = asyncHandler(async (req, res, next) => {
   const token = req.cookies.refreshToken;

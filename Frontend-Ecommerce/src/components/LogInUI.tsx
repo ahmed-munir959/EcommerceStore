@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authHero from "../assets/icons/authHero.jpg";
 import { showSuccessToast, showErrorToast } from "../utils/toast.config";
+import { useAuth } from "../context/AuthContext";
 import "../styles/scss/_LogInUI.scss";
 
 const LogInUI: React.FC = () => {
@@ -9,6 +10,7 @@ const LogInUI: React.FC = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const isEmail = (v: string) => /^\S+@\S+\.\S+$/.test(v);
   const isPhone = (v: string) => /^\+?\d{7,15}$/.test(v);
@@ -48,14 +50,14 @@ const LogInUI: React.FC = () => {
       }
 
       // Success: backend returns accessToken + user
-      const { accessToken } = data;
-      if (accessToken) {
-        // store accessToken for client-side auth checks (simple)
-        sessionStorage.setItem("accessToken", accessToken);
+      const { accessToken, user } = data;
+      if (accessToken && user) {
+        // Store user and accessToken in AuthContext (which also handles sessionStorage)
+        login(user, accessToken);
       }
 
       showSuccessToast("Logged in successfully! Redirecting...");
-      
+
       // Small delay to let user see the toast before redirect
       setTimeout(() => {
         navigate("/home", { replace: true });
