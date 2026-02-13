@@ -25,7 +25,10 @@ type QuickViewModalProps = {
 
 const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, product }) => {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useCart();
+
+  // Check if item is in wishlist
+  const isFavorite = isInWishlist(product.id);
 
   // Close modal on Escape key press
   useEffect(() => {
@@ -56,6 +59,29 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
     });
     onClose();
     navigate(`/cart/${product.id}`);
+  };
+
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isFavorite) {
+      // Remove from wishlist
+      removeFromWishlist(product.id);
+    } else {
+      // Add to wishlist with full product details
+      addToWishlist({
+        id: product.id,
+        image: product.image,
+        name: product.name,
+        price: product.currentPrice,
+        originalPrice: product.originalPrice,
+        discount: product.discount,
+        rating: product.rating,
+        reviewCount: product.reviewCount,
+        description: product.description
+      });
+    }
   };
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -128,8 +154,16 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
               <button className="btn-add-to-cart" onClick={handleAddToCart}>
                 Add To Cart
               </button>
-              <button className="btn-wishlist" aria-label="Add to wishlist">
-                <Heart className="heart-icon" strokeWidth={1.5} />
+              <button
+                className={`btn-wishlist ${isFavorite ? 'active' : ''}`}
+                onClick={handleWishlistToggle}
+                aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
+              >
+                <Heart
+                  className="heart-icon"
+                  strokeWidth={1.5}
+                  fill={isFavorite ? '#DB4444' : 'none'}
+                />
               </button>
             </div>
           </div>
