@@ -1,35 +1,31 @@
-// models/cartModel.js
+// models/CartItem.js
 import mongoose from 'mongoose';
 
-const cartItemSchema = new mongoose.Schema({
-  productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product', // References the 'Product' model
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    min: 1,
-    default: 1,
-  },
-  // You could also store price here to "lock it in", but for simplicity,
-  // we will calculate it dynamically by populating the product.
-});
-
-const cartSchema = new mongoose.Schema(
+const cartItemSchema = new mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // References the 'User' model
+      ref: 'User',
       required: true,
-      unique: true, // Ensures one cart per user
     },
-    items: [cartItemSchema],
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1,
+      default: 1,
+    },
   },
   { timestamps: true }
 );
 
-const Cart = mongoose.model('Cart', cartSchema);
+// Compound unique index to prevent duplicate cart items for same user-product combination
+cartItemSchema.index({ user: 1, product: 1 }, { unique: true });
 
-export default Cart;
+const CartItem = mongoose.model('CartItem', cartItemSchema);
+
+export default CartItem;
