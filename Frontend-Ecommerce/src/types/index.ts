@@ -27,3 +27,19 @@ export interface AppContextType {
   removeFavorite: (id: number) => void;
   isFavorite: (id: number) => boolean;
 }
+
+export interface Product {
+  _id: string; // MongoDB ID
+  id?: string; // Legacy ID if needed
+  image: string;
+  name: string;
+  currentPrice: number;
+  originalPrice: number;
+  discount: number;
+  rating: number;
+  reviewCount: number;
+  description: string;
+  category?: string;
+  parentCategory?: string;
+  tags: string[];
+}

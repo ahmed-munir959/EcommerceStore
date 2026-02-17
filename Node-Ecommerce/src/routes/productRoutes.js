@@ -7,9 +7,11 @@ import {
   getProductById,
   deleteProduct,
   updateProduct,
+  getFilteredProducts,
 } from '../controllers/productController.js';
 
 const router = express.Router();
+
 
 /**
  * @openapi
@@ -125,23 +127,13 @@ router
   .route('/')
   .get(getProducts)
   .post(
-    protect,
-    authorizeRoles('seller', 'admin'),
     upload.array('images', 5),
     createProduct
   );
 
-  router.get("/", async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
-  });
-  
-  // POST new product
-  router.post("/", async (req, res) => {
-    const product = new Product(req.body);
-    const created = await product.save();
-    res.status(201).json(created);
-  });
+// Specific endpoint requested by user
+router.get('/getProducts', protect, getProducts);
+router.get('/getFilteredProducts', protect, getFilteredProducts);
 
 /**
  * @openapi

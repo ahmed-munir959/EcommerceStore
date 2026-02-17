@@ -2,38 +2,45 @@
 // components/CartUI.tsx - Complete Cart Implementation
 // ============================================
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ChevronUp, ChevronDown, X } from 'lucide-react';
 import { useCart } from '../context/CartContext.tsx';
 import '../styles/scss/_CartUI.scss';
 
 const CartUI: React.FC = () => {
   const navigate = useNavigate();
-  const { productId } = useParams<{ productId: string }>();
-  const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, getCartTotal, loading } = useCart();
   const [couponCode, setCouponCode] = useState('');
 
-  const handleQuantityChange = (id: string | number, increment: boolean) => {
+  const handleQuantityChange = async (id: string | number, increment: boolean) => {
     const item = cartItems.find(i => i.id === id);
     if (item) {
-      updateQuantity(id, increment ? item.quantity + 1 : item.quantity - 1);
+      await updateQuantity(id, increment ? item.quantity + 1 : item.quantity - 1);
     }
   };
 
-  const handleRemoveItem = (id: string | number) => {
-    removeFromCart(id);
+  const handleRemoveItem = async (id: string | number) => {
+    await removeFromCart(id);
   };
 
   const subtotal = getCartTotal();
   const shipping = 0; // Free shipping
   const total = subtotal + shipping;
 
+  if (loading && cartItems.length === 0) {
+    return (
+      <div className="flex h-64 w-full items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-auth-primary border-t-transparent"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="cart-container w-full py-8 sm:py-12 lg:py-20">
       {/* Breadcrumb */}
       <div className="breadcrumb mb-6 sm:mb-8 lg:mb-20">
         <span className="font-poppins text-sm text-gray-500">
-          <span 
+          <span
             className="cursor-pointer hover:text-black"
             onClick={() => navigate('/home')}
           >
@@ -57,7 +64,7 @@ const CartUI: React.FC = () => {
         {cartItems.length === 0 ? (
           <div className="text-center py-12 sm:py-16 lg:py-20">
             <p className="font-poppins text-base sm:text-lg text-gray-500 mb-6">Your cart is empty</p>
-            <button 
+            <button
               onClick={() => navigate('/home')}
               className="btn-auth-primary px-8 sm:px-10 lg:px-12 py-3 sm:py-3.5 lg:py-4 text-white font-poppins font-medium text-sm sm:text-base"
             >
@@ -66,7 +73,7 @@ const CartUI: React.FC = () => {
           </div>
         ) : (
           cartItems.map((item) => (
-            <div 
+            <div
               key={item.id}
               className="cart-item grid grid-cols-1 sm:grid-cols-4 gap-4 items-center px-4 sm:px-6 lg:px-10 py-4 sm:py-5 lg:py-6 shadow-sm relative"
             >
@@ -82,8 +89,8 @@ const CartUI: React.FC = () => {
               <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 ml-8 sm:ml-0">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-[54px] lg:h-[54px] bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
                   {item.image ? (
-                    <img 
-                      src={item.image} 
+                    <img
+                      src={item.image}
                       alt={item.name}
                       className="w-full h-full object-contain"
                     />
@@ -140,7 +147,7 @@ const CartUI: React.FC = () => {
       {/* Action Buttons */}
       {cartItems.length > 0 && (
         <div className="action-buttons flex flex-col sm:flex-row justify-between gap-4 mb-8 sm:mb-12 lg:mb-20">
-          <button 
+          <button
             onClick={() => navigate('/home')}
             className="btn-outline px-6 sm:px-8 lg:px-12 py-3 sm:py-3.5 lg:py-4 border border-gray-400 font-poppins font-medium text-sm sm:text-base hover:bg-gray-50 transition-colors"
           >
@@ -172,7 +179,7 @@ const CartUI: React.FC = () => {
           {/* Cart Total */}
           <div className="cart-total-section w-full lg:w-[470px] lg:ml-auto border-2 border-black rounded px-6 py-6 sm:px-8 sm:py-8">
             <h3 className="font-poppins text-lg sm:text-xl font-medium mb-6">Cart Total</h3>
-            
+
             <div className="space-y-4">
               {/* Subtotal */}
               <div className="flex justify-between items-center pb-4 border-b border-gray-300">
@@ -197,7 +204,7 @@ const CartUI: React.FC = () => {
 
             {/* Checkout Button */}
             <div className="flex justify-center mt-6">
-              <button 
+              <button
                 onClick={() => {
                   // Add checkout logic here
                   alert('Proceeding to checkout...');

@@ -11,8 +11,10 @@ import swaggerUi from 'swagger-ui-express';
 import productRoutes from './routes/productRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+import wishListRoutes from './routes/wishListRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import swaggerSpec from './config/swagger.js'; 
+import adminRoutes from './routes/adminRoutes.js';
+import swaggerSpec from './config/swagger.js';
 import connectDB from './config/db.js';
 
 // Error Handling Imports
@@ -26,12 +28,12 @@ const PORT = process.env.PORT || 5000;
 
 // Core Middleware
 app.use(helmet());
-app.use(cors( {
+app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true,
-  
-}, 
-console.log(`FE of URL  ${process.env.FRONTEND_URL} is Connected`)));
+
+},
+  console.log(`FE of URL  ${process.env.FRONTEND_URL} is Connected`)));
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -51,7 +53,9 @@ app.use(rateLimit({
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/wishlist', wishListRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes);
 
 // --- API Documentation Route ---
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

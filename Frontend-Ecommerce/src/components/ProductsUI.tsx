@@ -4,290 +4,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ProductCard from './shared/ProductCard';
+import axiosInstance from '../api/axiosInstance';
+import type { Product } from '../types';
 import '../styles/scss/_ProductsUI.scss';
 
-// Import product images
-//phones
-import phone1 from '../assets/icons/phone1.png';
-import phone2 from '../assets/icons/phone2.png';
-//computers
-import computer1 from '../assets/icons/computer1.webp';
-import computer2 from '../assets/icons/computer2.webp';
-// watch
-import watch1 from '../assets/icons/smartwatch1.webp';
-import watch2 from '../assets/icons/smartwatch2.webp';
-// camera
-import camera1 from '../assets/icons/camera1.webp';
-import camera2 from '../assets/icons/camera2.webp';
-// headphones
-import headphone1 from '../assets/icons/headphones1.webp';
-import headphone2 from '../assets/icons/headphones2.webp';
-// gaming
-import gaming1 from '../assets/icons/gaming1.webp';
-import gaming2 from '../assets/icons/gaming2.webp';
-// power bank
-import powerBank1 from '../assets/icons/powerBank1.webp';
-import powerBank2 from '../assets/icons/powerBank2.webp';
-// mini projector
-import miniProjector1 from '../assets/icons/miniProjector1.webp';
-import miniProjector2 from '../assets/icons/miniProjector2.webp';
-// postureCorrector
-import postureCorrector1 from '../assets/icons/postureCorrector1.jpeg';
-import postureCorrector2 from '../assets/icons/postureCorrector2.jpeg';
-// fitnessTracker
-import fitnessTracker1 from '../assets/icons/fitnessTracker1.webp';
-import fitnessTracker2 from '../assets/icons/fitnessTracker2.webp';
-
-// All Products Data with Categories
-const allProducts = [
-  // Phones
-  {
-    id: 'prod-phone-1',
-    category: 'phones',
-    image: phone1,
-    name: 'iPhone 14 Pro Max',
-    currentPrice: 1099,
-    originalPrice: 1299,
-    discount: 0,
-    rating: 5,
-    reviewCount: 245
-  },
-  {
-    id: 'prod-phone-2',
-    category: 'phones',
-    image: phone2,
-    name: 'Samsung Galaxy S23 Ultra',
-    currentPrice: 999,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 189
-  },
-  
-  // Computers
-  {
-    id: 'prod-computer-1',
-    category: 'computers',
-    image: computer1,
-    name: 'MacBook Pro 16"',
-    currentPrice: 2399,
-    originalPrice: 2599,
-    discount: 0,
-    rating: 5,
-    reviewCount: 432
-  },
-  {
-    id: 'prod-computer-2',
-    category: 'computers',
-    image: computer2,
-    name: 'Dell XPS 15 Laptop',
-    currentPrice: 1799,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 298
-  },
-  
-  // SmartWatch
-  {
-    id: 'prod-watch-1',
-    category: 'smartwatch',
-    image: watch1,
-    name: 'Apple Watch Series 9',
-    currentPrice: 399,
-    originalPrice: 449,
-    discount: 0,
-    rating: 5,
-    reviewCount: 567
-  },
-  {
-    id: 'prod-watch-2',
-    category: 'smartwatch',
-    image: watch2,
-    name: 'Samsung Galaxy Watch 6',
-    currentPrice: 299,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 423
-  },
-  
-  // Camera
-  {
-    id: 'prod-camera-1',
-    category: 'camera',
-    image: camera1,
-    name: 'Canon EOS R5',
-    currentPrice: 3899,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 156
-  },
-  {
-    id: 'prod-camera-2',
-    category: 'camera',
-    image: camera2,
-    name: 'Sony Alpha A7 IV',
-    currentPrice: 2498,
-    originalPrice: 2698,
-    discount: 0,
-    rating: 5,
-    reviewCount: 203
-  },
-  
-  // HeadPhones
-  {
-    id: 'prod-headphone-1',
-    category: 'headphones',
-    image: headphone1,
-    name: 'Sony WH-1000XM5',
-    currentPrice: 398,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 892
-  },
-  {
-    id: 'prod-headphone-2',
-    category: 'headphones',
-    image: headphone2,
-    name: 'AirPods Pro 2nd Gen',
-    currentPrice: 249,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 1024
-  },
-  
-  // Gaming
-  {
-    id: 'prod-gaming-1',
-    category: 'gaming',
-    image: gaming1,
-    name: 'PlayStation 5',
-    currentPrice: 499,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 2341
-  },
-  {
-    id: 'prod-gaming-2',
-    category: 'gaming',
-    image: gaming2,
-    name: 'Xbox Series X',
-    currentPrice: 499,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 1876
-  },
-  
-  // Power Banks (subcategory of Portable Gadgets)
-  {
-    id: 'prod-powerbank-1',
-    category: 'power-banks',
-    parentCategory: 'portable-gadgets',
-    image: powerBank1,
-    name: 'Anker PowerCore 20000mAh',
-    currentPrice: 45,
-    originalPrice: 60,
-    discount: 0,
-    rating: 5,
-    reviewCount: 1256
-  },
-  {
-    id: 'prod-powerbank-2',
-    category: 'power-banks',
-    parentCategory: 'portable-gadgets',
-    image: powerBank2,
-    name: 'RAVPower 26800mAh Power Bank',
-    currentPrice: 55,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 892
-  },
-  
-  // Mini Projectors (subcategory of Portable Gadgets)
-  {
-    id: 'prod-projector-1',
-    category: 'mini-projectors',
-    parentCategory: 'portable-gadgets',
-    image: miniProjector1,
-    name: 'XGIMI MoGo Pro Portable Projector',
-    currentPrice: 499,
-    originalPrice: 599,
-    discount: 0,
-    rating: 5,
-    reviewCount: 456
-  },
-  {
-    id: 'prod-projector-2',
-    category: 'mini-projectors',
-    parentCategory: 'portable-gadgets',
-    image: miniProjector2,
-    name: 'Anker Nebula Capsule II',
-    currentPrice: 579,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 678
-  },
-  
-  // Fitness Trackers (subcategory of Wearable Tech)
-  {
-    id: 'prod-fitness-1',
-    category: 'fitness-trackers',
-    parentCategory: 'wearable-tech',
-    image: fitnessTracker1,
-    name: 'Fitbit Charge 6',
-    currentPrice: 159,
-    originalPrice: 179,
-    discount: 0,
-    rating: 5,
-    reviewCount: 2341
-  },
-  {
-    id: 'prod-fitness-2',
-    category: 'fitness-trackers',
-    parentCategory: 'wearable-tech',
-    image: fitnessTracker2,
-    name: 'Garmin Vivosmart 5',
-    currentPrice: 149,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 1567
-  },
-  
-  // Posture Correctors (subcategory of Wearable Tech)
-  {
-    id: 'prod-posture-1',
-    category: 'posture-correctors',
-    parentCategory: 'wearable-tech',
-    image: postureCorrector1,
-    name: 'UPRIGHT GO 2 Posture Trainer',
-    currentPrice: 79,
-    originalPrice: 99,
-    discount: 0,
-    rating: 4,
-    reviewCount: 892
-  },
-  {
-    id: 'prod-posture-2',
-    category: 'posture-correctors',
-    parentCategory: 'wearable-tech',
-    image: postureCorrector2,
-    name: 'Lumo Lift Posture Coach',
-    currentPrice: 89,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 654
-  }
-];
 
 // Category mapping including new categories and subcategories
 const categoryNames: { [key: string]: string } = {
@@ -298,11 +18,11 @@ const categoryNames: { [key: string]: string } = {
   'camera': 'Camera',
   'headphones': 'HeadPhones',
   'gaming': 'Gaming',
-  
+
   // New main categories (will show "All Products" until products are added)
   'portable-gadgets': 'Portable Gadgets',
   'wearable-tech': 'Wearable Tech',
-  
+
   // Subcategories (will show "All Products" until products are added)
   'power-banks': 'Power Banks',
   'mini-projectors': 'Mini Projectors',
@@ -318,22 +38,27 @@ const parentCategoryMap: { [key: string]: string[] } = {
 
 const ProductsUI: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [filteredProducts, setFilteredProducts] = useState(allProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Initialize selected categories from URL params (only runs once on mount)
+  // Sync selected categories from URL params
   useEffect(() => {
     // Handle both 'category' (singular from home page) and 'categories' (plural from multi-select)
     const singleCategory = searchParams.get('category');
     const multipleCategories = searchParams.get('categories');
-    
+
     if (multipleCategories) {
-      setSelectedCategories(multipleCategories.split(','));
+      const cats = multipleCategories.split(',').filter(Boolean);
+      // Only update if different to avoid infinite loops
+      if (cats.join(',') !== selectedCategories.join(',')) {
+        setSelectedCategories(cats);
+      }
     } else if (singleCategory) {
       let categoriesToSet: string[] = [];
-      
+
       // Handle parent categories - if it's a parent, add all its children
       if (parentCategoryMap[singleCategory]) {
         const childCategories = parentCategoryMap[singleCategory];
@@ -348,33 +73,52 @@ const ProductsUI: React.FC = () => {
             break;
           }
         }
-        
+
         if (!parentFound) {
           categoriesToSet = [singleCategory];
         }
       }
-      
+
       setSelectedCategories(categoriesToSet);
-      
+
       // Update URL to use consistent 'categories' format with replace: true
-      // This ensures browser back button goes to /home instead of ?category=X
       setSearchParams({ categories: categoriesToSet.join(',') }, { replace: true });
-    } else {
+    } else if (selectedCategories.length > 0 && !singleCategory && !multipleCategories) {
       setSelectedCategories([]);
     }
-  }, []); // Empty dependency array - only run on mount
+  }, [searchParams, setSearchParams]); // Removed empty array, now syncs on any URL change
 
-  // Filter products based on selected categories
+  // Fetch products from backend when categories change
   useEffect(() => {
-    if (selectedCategories.length === 0) {
-      setFilteredProducts(allProducts);
-    } else {
-      const filtered = allProducts.filter(product => {
-        // Only show products whose actual category (not parent) is selected
-        return selectedCategories.includes(product.category);
-      });
-      setFilteredProducts(filtered);
-    }
+    let isActive = true;
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const params: any = {};
+        if (selectedCategories.length > 0) {
+          // Send selected categories as comma-separated string for multi-value filtering
+          params.category = selectedCategories.join(',');
+        }
+
+        const response = await axiosInstance.get('/products/getFilteredProducts', { params });
+        if (isActive) {
+          setProducts(response.data.products);
+        }
+      } catch (error) {
+        if (isActive) {
+          console.error('Error fetching products:', error);
+        }
+      } finally {
+        if (isActive) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchProducts();
+    return () => {
+      isActive = false;
+    };
   }, [selectedCategories]);
 
   // Close dropdown when clicking outside
@@ -393,11 +137,11 @@ const ProductsUI: React.FC = () => {
 
   const handleCategoryToggle = (category: string) => {
     let newSelectedCategories: string[];
-    
+
     if (selectedCategories.includes(category)) {
       // Removing category
       newSelectedCategories = selectedCategories.filter(c => c !== category);
-      
+
       // If removing a parent category, also remove its children
       if (parentCategoryMap[category]) {
         const childrenToRemove = parentCategoryMap[category];
@@ -409,7 +153,7 @@ const ProductsUI: React.FC = () => {
         for (const [parent, children] of Object.entries(parentCategoryMap)) {
           if (children.includes(category)) {
             // Check if any other children will remain selected
-            const remainingChildren = children.filter(child => 
+            const remainingChildren = children.filter(child =>
               newSelectedCategories.includes(child) && child !== category
             );
             if (remainingChildren.length === 0) {
@@ -422,7 +166,7 @@ const ProductsUI: React.FC = () => {
     } else {
       // Adding category
       newSelectedCategories = [...selectedCategories, category];
-      
+
       // If adding a parent category, also add its children
       if (parentCategoryMap[category]) {
         const childrenToAdd = parentCategoryMap[category];
@@ -440,23 +184,23 @@ const ProductsUI: React.FC = () => {
         }
       }
     }
-    
+
     setSelectedCategories(newSelectedCategories);
-    
+
     // Update URL params with replace: true to avoid creating history entries
     if (newSelectedCategories.length > 0) {
       setSearchParams({ categories: newSelectedCategories.join(',') }, { replace: true });
     } else {
       setSearchParams({}, { replace: true });
     }
-    
+
     // Close dropdown after selection
     setIsDropdownOpen(false);
   };
 
   const handleRemoveCategory = (category: string) => {
     let newSelectedCategories = selectedCategories.filter(c => c !== category);
-    
+
     // If removing a parent category, also remove its children
     if (parentCategoryMap[category]) {
       const childrenToRemove = parentCategoryMap[category];
@@ -468,7 +212,7 @@ const ProductsUI: React.FC = () => {
       for (const [parent, children] of Object.entries(parentCategoryMap)) {
         if (children.includes(category)) {
           // Check if all children will be removed
-          const remainingChildren = children.filter(child => 
+          const remainingChildren = children.filter(child =>
             newSelectedCategories.includes(child) && child !== category
           );
           if (remainingChildren.length === 0 && newSelectedCategories.includes(parent)) {
@@ -478,9 +222,9 @@ const ProductsUI: React.FC = () => {
         }
       }
     }
-    
+
     setSelectedCategories(newSelectedCategories);
-    
+
     // Update URL params with replace: true to avoid creating history entries
     if (newSelectedCategories.length > 0) {
       setSearchParams({ categories: newSelectedCategories.join(',') }, { replace: true });
@@ -498,25 +242,25 @@ const ProductsUI: React.FC = () => {
   const isParentChecked = (parentCategory: string): boolean => {
     const children = parentCategoryMap[parentCategory];
     if (!children) return selectedCategories.includes(parentCategory);
-    
+
     // Parent is checked if it's explicitly in the array OR any of its children are selected
-    return selectedCategories.includes(parentCategory) || 
-           children.some(child => selectedCategories.includes(child));
+    return selectedCategories.includes(parentCategory) ||
+      children.some(child => selectedCategories.includes(child));
   };
 
   // Helper function to check if parent is indeterminate (some but not all children checked)
   const isParentIndeterminate = (parentCategory: string): boolean => {
     const children = parentCategoryMap[parentCategory];
     if (!children) return false;
-    
+
     const selectedChildren = children.filter(child => selectedCategories.includes(child));
     return selectedChildren.length > 0 && selectedChildren.length < children.length;
   };
 
   // Get products to display - show all when filtered, limit to 8 when showing all products
-  const productsToDisplay = selectedCategories.length > 0 
-    ? filteredProducts 
-    : filteredProducts.slice(0, 8);
+  const productsToDisplay = selectedCategories.length > 0
+    ? products
+    : products.slice(0, 8);
 
   return (
     <div className="products-page w-full">
@@ -545,24 +289,24 @@ const ProductsUI: React.FC = () => {
                   disabled={selectedCategories.length === 0}
                   className={`
                     clear-all-btn
-                    ${selectedCategories.length > 0 
-                      ? 'active' 
+                    ${selectedCategories.length > 0
+                      ? 'active'
                       : 'disabled'
                     }
                   `}
                   title="Clear all filters"
                   aria-label="Clear all filters"
                 >
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className="h-4 w-4" 
-                    viewBox="0 0 20 20" 
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 20 20"
                     fill="currentColor"
                   >
-                    <path 
-                      fillRule="evenodd" 
-                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" 
-                      clipRule="evenodd" 
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </button>
@@ -580,19 +324,19 @@ const ProductsUI: React.FC = () => {
                     aria-expanded={isDropdownOpen}
                   >
                     <span className="select-placeholder">
-                      {selectedCategories.length === 0 
-                        ? 'Select Categories' 
+                      {selectedCategories.length === 0
+                        ? 'Select Categories'
                         : `${selectedCategories.length} selected`
                       }
                     </span>
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
                       className={`select-arrow ${isDropdownOpen ? 'rotate' : ''}`}
-                      width="16" 
-                      height="16" 
+                      width="16"
+                      height="16"
                       viewBox="0 0 16 16"
                     >
-                      <path fill="#666" d="M4 6l4 4 4-4"/>
+                      <path fill="#666" d="M4 6l4 4 4-4" />
                     </svg>
                   </button>
 
@@ -732,16 +476,16 @@ const ProductsUI: React.FC = () => {
                         className="pill-remove"
                         aria-label={`Remove ${categoryNames[category]} filter`}
                       >
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className="h-3 w-3" 
-                          viewBox="0 0 20 20" 
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-3 w-3"
+                          viewBox="0 0 20 20"
                           fill="currentColor"
                         >
-                          <path 
-                            fillRule="evenodd" 
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" 
-                            clipRule="evenodd" 
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
                           />
                         </svg>
                       </button>
@@ -755,12 +499,16 @@ const ProductsUI: React.FC = () => {
       </div>
 
       {/* Products Grid */}
-      {productsToDisplay.length > 0 ? (
+      {loading ? (
+        <div className="flex h-64 w-full items-center justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-auth-primary border-t-transparent"></div>
+        </div>
+      ) : productsToDisplay.length > 0 ? (
         <div className="products-grid mb-12 sm:mb-16 lg:mb-20">
-          {productsToDisplay.map((product) => (
+          {productsToDisplay.map((product: Product) => (
             <ProductCard
-              key={product.id}
-              productId={product.id}
+              key={product._id}
+              productId={product._id}
               productImage={product.image}
               productName={product.name}
               currentPrice={product.currentPrice}

@@ -15,17 +15,28 @@ export const protect = async (req, res, next) => {
     token = req.headers.authorization.split(' ')[1];
   }
 
-  if (!token) return res.status(401).json({ message: 'Not authorized, no token' });
+  if (!token) {
+    return res.status(401).json({ message: 'Not authorized, no token provided' });
+  }
 
   try {
+    // Decode and verify JWT
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const user = await User.findById(decoded.id).select('-password');
-    if (!user) return res.status(404).json({ message: 'User not found' });
 
+    // Check if user still exists in DB
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) {
+      return res.status(401).json({ message: 'User not found, authentication failed' });
+    }
+
+    // Attach user to request object
     req.user = user;
     next();
   } catch (err) {
-    return res.status(401).json({ message: 'Not authorized, token failed' });
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Not authorized, token expired', code: 'TOKEN_EXPIRED' });
+    }
+    return res.status(401).json({ message: 'Not authorized, token invalid' });
   }
 };
 

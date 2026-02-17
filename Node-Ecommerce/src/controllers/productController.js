@@ -41,11 +41,28 @@ export const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 export const getProducts = asyncHandler(async (req, res, next) => {
-  const resultsPerPage = Number(req.query.limit) || 10;
+  const resultsPerPage = req.query.limit ? Number(req.query.limit) : 1000; // Default to a large number for home page if not specified
   const productCountFeatures = new ApiFeatures(Product.find(), req.query).search().filter();
   const totalProducts = await productCountFeatures.query.countDocuments();
-  const apiFeatures = new ApiFeatures(Product.find(), req.query).search().filter().paginate();
-  const products = await apiFeatures.query.populate('seller', 'name email');
+  const apiFeatures = new ApiFeatures(Product.find(), req.query).search().filter().paginate(resultsPerPage);
+  const products = await apiFeatures.query;
+  const totalPages = Math.ceil(totalProducts / resultsPerPage);
+
+  res.status(200).json({
+    success: true,
+    count: products.length,
+    totalProducts,
+    totalPages,
+    currentPage: Number(req.query.page) || 1,
+    products,
+  });
+});
+export const getFilteredProducts = asyncHandler(async (req, res, next) => {
+  const resultsPerPage = req.query.limit ? Number(req.query.limit) : 100;
+  const productCountFeatures = new ApiFeatures(Product.find(), req.query).search().filter();
+  const totalProducts = await productCountFeatures.query.countDocuments();
+  const apiFeatures = new ApiFeatures(Product.find(), req.query).search().filter().paginate(resultsPerPage);
+  const products = await apiFeatures.query;
   const totalPages = Math.ceil(totalProducts / resultsPerPage);
 
   res.status(200).json({

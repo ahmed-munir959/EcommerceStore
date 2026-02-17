@@ -18,6 +18,8 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import ProductCard from './shared/ProductCard';
+import axiosInstance from '../api/axiosInstance';
+import type { Product } from '../types';
 import appleImage from '../assets/icons/appleImage.png';
 import musicImage from '../assets/icons/musicImage.png';
 import PlayStation from '../assets/icons/PlayStation.png';
@@ -25,259 +27,7 @@ import womenCollection from '../assets/icons/womenCollection.png';
 import speakers from '../assets/icons/speakers.png';
 import Perfume from '../assets/icons/Perfume.png';
 
-// import images for Flash Sales
-import flashSales1 from '../assets/icons/flashSale1.png';
-import flashSales2 from '../assets/icons/flashSale2.png';
-import flashSales3 from '../assets/icons/flashSale3.png';
-import flashSales4 from '../assets/icons/flashSale4.png';
-
-// import images for Best Selling Product
-import bestSelling1 from '../assets/icons/bestSelling1.png';
-import bestSelling2 from '../assets/icons/bestSelling2.png';
-import bestSelling3 from '../assets/icons/bestSelling3.png';
-import bestSelling4 from '../assets/icons/bestSelling4.png';
-
-// import images for Explore Products
-import exploreProducts1 from '../assets/icons/exploreProducts1.jpg';
-import exploreProducts2 from '../assets/icons/exploreProducts2.png';
-import exploreProducts3 from '../assets/icons/exploreProducts3.png';
-import exploreProducts4 from '../assets/icons/exploreProducts4.png';
-import exploreProducts5 from '../assets/icons/exploreProducts5.png';
-import exploreProducts6 from '../assets/icons/exploreProducts6.png';
-import exploreProducts7 from '../assets/icons/exploreProducts7.png';
-import exploreProducts8 from '../assets/icons/exploreProducts8.png';
-
-// Flash Sales Products Data with Descriptions
-const flashSalesProducts = [
-  {
-    id: 'flash-1',
-    image: flashSales1,
-    name: 'HAVIT HV-G92 Gamepad',
-    currentPrice: 120,
-    originalPrice: 160,
-    discount: 40,
-    rating: 5,
-    reviewCount: 88,
-    description: 'Experience ultimate gaming control with the HAVIT HV-G92 Gamepad. Featuring ergonomic design, responsive buttons, and dual vibration motors for immersive gameplay. Compatible with PC, PS3, and Android devices.'
-  },
-  {
-    id: 'flash-2',
-    image: flashSales2,
-    name: 'AK-900 Wired Keyboard',
-    currentPrice: 960,
-    originalPrice: 1160,
-    discount: 35,
-    rating: 4,
-    reviewCount: 75,
-    description: 'Premium mechanical gaming keyboard with customizable RGB backlighting, anti-ghosting technology, and durable switches rated for 50 million keystrokes. Perfect for gamers and professionals alike.'
-  },
-  {
-    id: 'flash-3',
-    image: flashSales3,
-    name: 'IPS LCD Gaming Monitor',
-    currentPrice: 370,
-    originalPrice: 400,
-    discount: 30,
-    rating: 5,
-    reviewCount: 99,
-    description: '27-inch Full HD IPS display with 144Hz refresh rate and 1ms response time. Enjoy vibrant colors, wide viewing angles, and smooth gameplay with AMD FreeSync technology.'
-  },
-  {
-    id: 'flash-4',
-    image: flashSales4,
-    name: 'S-Series Comfort Chair',
-    currentPrice: 375,
-    originalPrice: 400,
-    discount: 25,
-    rating: 4,
-    reviewCount: 99,
-    description: 'Ergonomic gaming chair with adjustable lumbar support, 4D armrests, and premium PU leather. Designed for extended gaming sessions with maximum comfort and style.'
-  },
-  {
-    id: 'flash-5',
-    image: flashSales1,
-    name: 'HAVIT HV-G92 Gamepad',
-    currentPrice: 120,
-    originalPrice: 160,
-    discount: 40,
-    rating: 5,
-    reviewCount: 88,
-    description: 'Experience ultimate gaming control with the HAVIT HV-G92 Gamepad. Featuring ergonomic design, responsive buttons, and dual vibration motors for immersive gameplay. Compatible with PC, PS3, and Android devices.'
-  },
-  {
-    id: 'flash-6',
-    image: flashSales2,
-    name: 'AK-900 Wired Keyboard',
-    currentPrice: 960,
-    originalPrice: 1160,
-    discount: 35,
-    rating: 4,
-    reviewCount: 75,
-    description: 'Premium mechanical gaming keyboard with customizable RGB backlighting, anti-ghosting technology, and durable switches rated for 50 million keystrokes. Perfect for gamers and professionals alike.'
-  },
-  {
-    id: 'flash-7',
-    image: flashSales3,
-    name: 'IPS LCD Gaming Monitor',
-    currentPrice: 370,
-    originalPrice: 400,
-    discount: 30,
-    rating: 5,
-    reviewCount: 99,
-    description: '27-inch Full HD IPS display with 144Hz refresh rate and 1ms response time. Enjoy vibrant colors, wide viewing angles, and smooth gameplay with AMD FreeSync technology.'
-  },
-  {
-    id: 'flash-8',
-    image: flashSales4,
-    name: 'S-Series Comfort Chair',
-    currentPrice: 375,
-    originalPrice: 400,
-    discount: 25,
-    rating: 4,
-    reviewCount: 99,
-    description: 'Ergonomic gaming chair with adjustable lumbar support, 4D armrests, and premium PU leather. Designed for extended gaming sessions with maximum comfort and style.'
-  }
-];
-
-// Best Selling Products Data with Descriptions
-const bestSellingProducts = [
-  {
-    id: 'best-1',
-    image: bestSelling1,
-    name: 'The north coat',
-    currentPrice: 260,
-    originalPrice: 360,
-    discount: 0,
-    rating: 5,
-    reviewCount: 65,
-    description: 'Stay warm and stylish with The North Coat. Premium insulation, water-resistant fabric, and modern design make it perfect for cold weather adventures. Features multiple pockets and adjustable hood.'
-  },
-  {
-    id: 'best-2',
-    image: bestSelling2,
-    name: 'Gucci duffle bag',
-    currentPrice: 960,
-    originalPrice: 1160,
-    discount: 0,
-    rating: 4,
-    reviewCount: 65,
-    description: 'Luxury meets functionality with this Gucci duffle bag. Crafted from premium leather with signature GG pattern, spacious interior, and durable construction. Perfect for travel or gym.'
-  },
-  {
-    id: 'best-3',
-    image: bestSelling3,
-    name: 'RGB liquid CPU Cooler',
-    currentPrice: 160,
-    originalPrice: 170,
-    discount: 0,
-    rating: 4,
-    reviewCount: 65,
-    description: 'High-performance liquid cooling system with vibrant RGB lighting. Keep your CPU running cool and quiet with advanced pump technology and 240mm radiator. Compatible with most modern processors.'
-  },
-  {
-    id: 'best-4',
-    image: bestSelling4,
-    name: 'Small BookSelf',
-    currentPrice: 360,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 65,
-    description: 'Elegant and compact bookshelf crafted from solid wood. Features 4 adjustable shelves, modern minimalist design, and sturdy construction. Perfect for organizing books, decorations, and collectibles.'
-  }
-];
-
-// Explore Products Data with Descriptions
-const exploreProductsData = [
-  {
-    id: 'explore-1',
-    image: exploreProducts1,
-    name: 'Breed Dry Dog Food',
-    currentPrice: 100,
-    originalPrice: 0,
-    discount: 0,
-    rating: 3,
-    reviewCount: 35,
-    description: 'Premium nutrition for your canine companion. Made with real chicken, wholesome grains, and essential vitamins. Supports healthy digestion, strong bones, and a shiny coat.'
-  },
-  {
-    id: 'explore-2',
-    image: exploreProducts2,
-    name: 'CANON EOS DSLR Camera',
-    currentPrice: 360,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 95,
-    description: 'Capture stunning photos with this professional DSLR camera. 24.1MP sensor, Full HD video recording, WiFi connectivity, and versatile lens compatibility. Perfect for photography enthusiasts.'
-  },
-  {
-    id: 'explore-3',
-    image: exploreProducts3,
-    name: 'ASUS FHD Gaming Laptop',
-    currentPrice: 700,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 325,
-    description: 'Powerful gaming laptop featuring Intel Core i7 processor, NVIDIA RTX graphics, 16GB RAM, and 512GB SSD. 15.6-inch FHD display with 144Hz refresh rate for smooth gaming experience.'
-  },
-  {
-    id: 'explore-4',
-    image: exploreProducts4,
-    name: 'Curology Product Set',
-    currentPrice: 500,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 145,
-    description: 'Complete skincare solution with personalized formulations. Includes cleanser, treatment cream, and moisturizer. Dermatologist-designed to target your specific skin concerns.'
-  },
-  {
-    id: 'explore-5',
-    image: exploreProducts5,
-    name: 'Kids Electric Car',
-    currentPrice: 960,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 65,
-    description: 'Safe and fun electric ride-on car for kids. Features realistic design, working headlights, music player, and remote control for parents. Rechargeable battery provides hours of entertainment.'
-  },
-  {
-    id: 'explore-6',
-    image: exploreProducts6,
-    name: 'Jr. Zoom Soccer Cleats',
-    currentPrice: 1160,
-    originalPrice: 0,
-    discount: 0,
-    rating: 5,
-    reviewCount: 35,
-    description: 'High-performance soccer cleats designed for young athletes. Lightweight construction, superior traction, and comfortable fit. Durable synthetic upper with reinforced toe box.'
-  },
-  {
-    id: 'explore-7',
-    image: exploreProducts7,
-    name: 'GP11 Shooter USB Gamepad',
-    currentPrice: 660,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 55,
-    description: 'Precision gaming controller with ergonomic design and responsive buttons. Plug-and-play USB connectivity, vibration feedback, and compatible with PC and console gaming.'
-  },
-  {
-    id: 'explore-8',
-    image: exploreProducts8,
-    name: 'Quilted Satin Jacket',
-    currentPrice: 660,
-    originalPrice: 0,
-    discount: 0,
-    rating: 4,
-    reviewCount: 55,
-    description: 'Trendy quilted satin jacket with luxurious finish. Lightweight yet warm, featuring side pockets and ribbed cuffs. Perfect layering piece for transitional weather.'
-  }
-];
+// Removed static data arrays - now fetched from backend
 
 // Countdown Timer Component    
 const CountdownTimer: React.FC<{ targetDate: Date }> = ({ targetDate }) => {
@@ -329,6 +79,37 @@ const EcommHomeUI: React.FC = () => {
   targetDate.setDate(targetDate.getDate() + 3);
   targetDate.setHours(23, 59, 59);
 
+  // Dynamic products state
+  const [flashSalesProducts, setFlashSalesProducts] = useState<Product[]>([]);
+  const [bestSellingProducts, setBestSellingProducts] = useState<Product[]>([]);
+  const [exploreProductsData, setExploreProductsData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get('/products/getProducts');
+        const allProducts: Product[] = response.data.products;
+
+        // Filter products by tags as defined in seed data
+        const flashSales = allProducts.filter(p => p.tags.includes('flash-sale'));
+        // If we have 4 products (as in the seed data), double them to match the static UI's 8-card display
+        setFlashSalesProducts(flashSales.length === 4 ? [...flashSales, ...flashSales] : flashSales);
+
+        setBestSellingProducts(allProducts.filter(p => p.tags.includes('best-selling')));
+        setExploreProductsData(allProducts.filter(p => p.tags.includes('explore')));
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   // State for expanded categories in sidebar (allow multiple)
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
@@ -348,10 +129,10 @@ const EcommHomeUI: React.FC = () => {
   const scrollFlashSales = (direction: 'left' | 'right') => {
     if (flashSalesScrollRef.current) {
       const scrollAmount = 300;
-      const newScrollLeft = direction === 'left' 
+      const newScrollLeft = direction === 'left'
         ? flashSalesScrollRef.current.scrollLeft - scrollAmount
         : flashSalesScrollRef.current.scrollLeft + scrollAmount;
-      
+
       flashSalesScrollRef.current.scrollTo({
         left: newScrollLeft,
         behavior: 'smooth'
@@ -374,9 +155,9 @@ const EcommHomeUI: React.FC = () => {
   const handleCategoryClick = (categoryId: string, hasSubcategories: boolean) => {
     if (hasSubcategories) {
       // Toggle subcategories in sidebar - allow multiple to be open
-      setExpandedCategories(prev => 
-        prev.includes(categoryId) 
-          ? prev.filter(id => id !== categoryId) 
+      setExpandedCategories(prev =>
+        prev.includes(categoryId)
+          ? prev.filter(id => id !== categoryId)
           : [...prev, categoryId]
       );
     } else {
@@ -394,18 +175,18 @@ const EcommHomeUI: React.FC = () => {
   };
 
   const categories = [
-    { 
+    {
       id: "portable-gadgets",
-      name: "Portable Gadgets", 
+      name: "Portable Gadgets",
       hasSubcategories: true,
       subcategories: [
         { id: "power-banks", name: "Power Banks" },
         { id: "mini-projectors", name: "Mini Projectors" }
       ]
     },
-    { 
+    {
       id: "wearable-tech",
-      name: "Wearable Tech", 
+      name: "Wearable Tech",
       hasSubcategories: true,
       subcategories: [
         { id: "fitness-trackers", name: "Fitness Trackers" },
@@ -437,7 +218,7 @@ const EcommHomeUI: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-6 md:gap-[45px]">
           {/* Categories Sidebar - Desktop Only */}
           <div className="categories-sidebar hidden md:flex md:w-[217px] pt-10 flex-col gap-4">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <React.Fragment key={category.id}>
                 {/* Main Category - Always Show */}
                 <button
@@ -455,7 +236,7 @@ const EcommHomeUI: React.FC = () => {
                     )
                   )}
                 </button>
-                
+
                 {/* Subcategories */}
                 {category.hasSubcategories && expandedCategories.includes(category.id) && category.subcategories && (
                   <div className="flex flex-col gap-2 pl-4">
@@ -475,7 +256,7 @@ const EcommHomeUI: React.FC = () => {
               </React.Fragment>
             ))}
           </div>
-          
+
           <div className="hidden md:block w-px h-[384px] bg-gray-400 opacity-50" />
           <div className="banner-image w-full md:flex-1 pt-6 lg:pt-10">
             <img src={appleImage} alt="iPhone 14 Series Banner" className="safe-image" loading="eager" />
@@ -504,13 +285,13 @@ const EcommHomeUI: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <button 
+              <button
                 onClick={() => scrollFlashSales('left')}
                 className="w-9 h-9 md:w-10 md:h-10 lg:w-[46px] lg:h-[46px] rounded-full bg-app-gray-light flex items-center justify-center hover:bg-gray-200 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 lg:w-6 lg:h-6" />
               </button>
-              <button 
+              <button
                 onClick={() => scrollFlashSales('right')}
                 className="w-9 h-9 md:w-10 md:h-10 lg:w-[46px] lg:h-[46px] rounded-full bg-app-gray-light flex items-center justify-center hover:bg-gray-200 transition-colors"
               >
@@ -520,27 +301,31 @@ const EcommHomeUI: React.FC = () => {
           </div>
         </div>
         <div className="relative -mr-4 sm:-mr-6 md:-mr-16 lg:-mr-[calc((100vw-1280px)/2+64px)]">
-        <div 
-          ref={flashSalesScrollRef}
-          className="products-scrollable overflow-x-auto scrollbar-hide flex gap-4 sm:gap-5 md:gap-6 lg:gap-[30px] pr-4 sm:pr-6 md:pr-16"
-        >
-          {flashSalesProducts.map((product) => (
-            <ProductCard 
-              key={product.id}
-              productId={product.id}
-              scrollable
-              productImage={product.image}
-              productName={product.name}
-              currentPrice={product.currentPrice}
-              originalPrice={product.originalPrice}
-              discount={product.discount}
-              rating={product.rating}
-              reviewCount={product.reviewCount}
-              showDiscount={true}
-              productDescription={product.description}
-            />
-          ))}
-        </div>
+          <div
+            ref={flashSalesScrollRef}
+            className="products-scrollable overflow-x-auto scrollbar-hide flex gap-4 sm:gap-5 md:gap-6 lg:gap-[30px] pr-4 sm:pr-6 md:pr-16"
+          >
+            {loading ? (
+              <div className="flex h-40 w-full items-center justify-center">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-auth-primary border-t-transparent"></div>
+              </div>
+            ) : flashSalesProducts.map((product, index) => (
+              <ProductCard
+                key={`${product._id}-${index}`}
+                productId={product._id}
+                scrollable
+                productImage={product.image}
+                productName={product.name}
+                currentPrice={product.currentPrice}
+                originalPrice={product.originalPrice}
+                discount={product.discount}
+                rating={product.rating}
+                reviewCount={product.reviewCount}
+                showDiscount={true}
+                productDescription={product.description}
+              />
+            ))}
+          </div>
         </div>
         <div className="m-8 sm:m-12 lg:m-[70px]">
           <div className="w-full h-px bg-gray-400 opacity-50" />
@@ -563,9 +348,9 @@ const EcommHomeUI: React.FC = () => {
           </div>
         </div>
         <div className="categories-flex flex flex-wrap justify-center md:justify-between gap-2.5 sm:gap-2.5 md:gap-3 lg:gap-[15px]">
-          {browseCategories.map((category, index) => (
+          {browseCategories.map((category) => (
             <div
-              key={index}
+              key={category.id}
               onClick={() => navigate(`/products?category=${category.id}`)}
               className="category-card w-[calc(33.333%-11px)] sm:w-[calc(33.333%-14px)] md:w-[calc(33.333%-16px)] lg:w-[170px] h-[145px] sm:h-[130px] md:h-[135px] lg:h-[145px] 
                          border border-[#0000004D] rounded flex flex-col items-center justify-center gap-2 sm:gap-3 lg:gap-4 cursor-pointer 
@@ -612,10 +397,12 @@ const EcommHomeUI: React.FC = () => {
             justify-items-center
           "
         >
-          {getProductsToDisplay(bestSellingProducts).map((product) => (
+          {loading ? (
+            <div className="col-span-full py-10">Loading products...</div>
+          ) : getProductsToDisplay(bestSellingProducts).map((product) => (
             <ProductCard
-              key={product.id}
-              productId={product.id}
+              key={product._id}
+              productId={product._id}
               productImage={product.image}
               productName={product.name}
               currentPrice={product.currentPrice}
@@ -666,10 +453,12 @@ const EcommHomeUI: React.FC = () => {
             mb-8 sm:mb-10 lg:mb-[60px]
           "
         >
-          {getProductsToDisplay(exploreProductsData).map((product) => (
+          {loading ? (
+            <div className="col-span-full py-10">Loading products...</div>
+          ) : getProductsToDisplay(exploreProductsData).map((product) => (
             <ProductCard
-              key={product.id}
-              productId={product.id}
+              key={product._id}
+              productId={product._id}
               productImage={product.image}
               productName={product.name}
               currentPrice={product.currentPrice}
@@ -682,7 +471,7 @@ const EcommHomeUI: React.FC = () => {
             />
           ))}
         </div>
-        
+
         {/* View All Products Button */}
         <div className="flex justify-center items-center w-full">
           <button
@@ -718,7 +507,7 @@ const EcommHomeUI: React.FC = () => {
             </h2>
           </div>
 
-          
+
 
 
 

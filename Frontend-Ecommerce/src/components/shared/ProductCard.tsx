@@ -46,11 +46,11 @@ const ProductCard: React.FC<Props> = ({
   // Check if item is in wishlist
   const isFavorite = isInWishlist(productId);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    addToCart({
+    await addToCart({
       id: productId,
       image: productImage,
       name: productName,
@@ -60,16 +60,16 @@ const ProductCard: React.FC<Props> = ({
     navigate(`/cart/${productId}`);
   };
 
-  const handleFavoriteToggle = (e: React.MouseEvent) => {
+  const handleFavoriteToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (isFavorite) {
       // Remove from wishlist
-      removeFromWishlist(productId);
+      await removeFromWishlist(productId);
     } else {
       // Add to wishlist with full product details
-      addToWishlist({
+      await addToWishlist({
         id: productId,
         image: productImage,
         name: productName,

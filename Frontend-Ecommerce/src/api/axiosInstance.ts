@@ -2,17 +2,27 @@ import axios, { AxiosError } from 'axios';
 import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 // Create axios instance with base configuration
+// axios instance bascially a custom version of axios with predefined settings
 const axiosInstance = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: 'http://localhost:8080/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Important for httpOnly cookies (refreshToken)
 });
 
 // Request interceptor
+// Automatically attaches your accessToken to every request.
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    // Retrieve token from sessionStorage as per user's requirement
+    const token = sessionStorage.getItem('accessToken');
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     // Log request for debugging
     console.log('🚀 API Request:', {
       method: config.method?.toUpperCase(),
@@ -20,9 +30,6 @@ axiosInstance.interceptors.request.use(
       timestamp: new Date().toISOString(),
     });
 
-    // You can add auth token here if needed
-    // config.headers.Authorization = `Bearer ${token}`;
-    
     return config;
   },
   (error: AxiosError) => {
@@ -32,6 +39,7 @@ axiosInstance.interceptors.request.use(
 );
 
 // Response interceptor
+// Global Error Handling, Lets you handle errors in one place.
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     // Log successful response
@@ -40,7 +48,7 @@ axiosInstance.interceptors.response.use(
       url: response.config.url,
       timestamp: new Date().toISOString(),
     });
-    
+
     return response;
   },
   (error: AxiosError) => {
